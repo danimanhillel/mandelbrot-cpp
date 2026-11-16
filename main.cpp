@@ -105,7 +105,7 @@ int main(int argc, char* argv[]) {
                 double dx = (e.motion.x - last_mx) / static_cast<double>(WIDTH);
                 double dy = (e.motion.y - last_my) / static_cast<double>(HEIGHT);
                 double aspect = static_cast<double>(WIDTH) / HEIGHT;
-                center_x -= dx * scale * aspect;
+                center_x += dx * scale * aspect;  // fixed left/right direction
                 center_y += dy * scale;
                 last_mx = e.motion.x;
                 last_my = e.motion.y;
@@ -129,14 +129,13 @@ int main(int argc, char* argv[]) {
                         center_x = -0.75; center_y = 0.0; scale = 2.5;
                         need_redraw = true;
                         break;
-                    case SDLK_UP: max_iter = std::max(50, max_iter - 50); need_redraw = true; break;  // swapped
-                    case SDLK_DOWN: max_iter = std::min(2000, max_iter + 50); need_redraw = true; break; // swapped
+                    case SDLK_UP: max_iter = std::max(50, max_iter - 50); need_redraw = true; break;
+                    case SDLK_DOWN: max_iter = std::min(2000, max_iter + 50); need_redraw = true; break;
                     case SDLK_LEFT: hue_shift = std::fmod(hue_shift - 10 + 360, 360); need_redraw = true; break;
                     case SDLK_RIGHT: hue_shift = std::fmod(hue_shift + 10, 360); need_redraw = true; break;
                     case SDLK_PLUS: case SDLK_EQUALS: sat = std::min(1.0, sat + 0.05); need_redraw = true; break;
                     case SDLK_MINUS: sat = std::max(0.0, sat - 0.05); need_redraw = true; break;
                     case SDLK_SPACE: {
-                        // Zoom in towards mouse position
                         double factor = 0.85;
                         int mx, my;
                         SDL_GetMouseState(&mx, &my);
